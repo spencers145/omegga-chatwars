@@ -1,0 +1,32 @@
+{
+    "name": "chatwars",
+    "description": "Typing race plugin.",
+    "author": "base4",
+    "config": {},
+    "commands": [{
+      "name": "/cw",
+      "description": "Chatwars main command",
+      "example": "/cw declare base4",
+      "args": [{
+        "name": "declare",
+        "description": "Send a chat war request to another player.",
+        "required": false
+      }, {
+        "name": "accept",
+        "description": "Accept a chat war request.",
+        "required": false
+      }, {
+        "name": "decline",
+        "description": "Decline a chat war request.",
+        "required": false
+      }, {
+        "name": "stats",
+        "description": "View the statistics of yourself or another player.",
+        "required": false
+      }, {
+        "name": "rules",
+        "description": "Get a quick overview of the rules of the game!",
+        "required": false
+      }]
+    }]
+}
