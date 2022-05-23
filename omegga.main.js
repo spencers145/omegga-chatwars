@@ -30,6 +30,7 @@ class war {
                 this.omegga.whisper(combatant, `<i>${this.challenger} has declared chat war on you! Type /cw accept or /cw decline!</>`);
                 this.omegga.whisper(combatant, `<i>You can view the rules of the game with /cw rules.</>`);
                 this.confirmations[combatant] = setTimeout(() => {
+                    this.omegga.broadcast(`War request timed out.`);
                     this.removeWar(`<i>War cancelled. Someone failed to respond to the confirmation prompt.</>`);
                 }, 20000);
             }
