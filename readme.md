@@ -5,7 +5,7 @@ Declare war on other players and race to type faster than them!
 
 ## Install
 
-omegga install gh:base4/chatwars
+omegga install gh:spencers145/chatwars
 
 ## Usage
 
