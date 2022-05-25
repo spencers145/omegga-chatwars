@@ -98,7 +98,7 @@ class war {
         this.timers.push(setTimeout(() => {
             this.timers.splice(0, 1);
             this.endRound();
-        }, 10000));
+        }, 15000));
         // also record round start time
     }
 
