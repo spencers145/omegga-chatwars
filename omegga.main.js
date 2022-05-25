@@ -360,7 +360,13 @@ module.exports = class Plugin {
             `Have you heard of today's sponsor?`,
             `What's your favorite fruit?`,
             `What's everyone's favorite Brickadia weapon?`,
-            `Thanks to UnstoppableGiant and FlavouredGames for helping test this plugin.`
+            `Thanks to UnstoppableGiant and FlavouredGames for helping test this plugin.`,
+            `egg`,
+            `I'm calling an emergency meeting!`,
+            `guys this phrase is missing did you install cs:source`,
+            `help i'm out of phrases`,
+            `I CAN'T TYPE FAST ENOUGH`,
+            `SLOW DOWN PLEASE I CAN'T KEEP UP`
         ];
 
         this.omegga.on("cmd:cw", async (player, subcommand, ...args) => {
