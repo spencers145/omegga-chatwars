@@ -153,12 +153,14 @@ class war {
         //find and declare the winner
         if (this.combatants.length === 1) {
             this.omegga.broadcast(`<b>${this.combatants[0]} won a chat war by default!</>`);
+            this.omegga.broadcast(`To declare your own chatwar, do /cw declare PLAYERNAME`);
             let currentStore = await this.store.get(this.combatants[0]);
             if (!currentStore) {
                 currentStore = { wins: 0, losses: 0, averageWPM: 0, sampleSize: 0 };
             }
             currentStore.wins += 1;
             await this.store.set(this.combatants[0], currentStore);
+            this.omegga.whisper(this.combatants[0], `<i>Use</> /cw stats <i>to view your win/loss and other statistics.</>`);
         } else if (this.combatants.length > 1) {
             //do actual algorithm
             let winner = this.combatants[0];
@@ -166,6 +168,7 @@ class war {
                 if (this.scores[combatant] > this.scores[winner]) winner = combatant;
             });
             this.omegga.broadcast(`<b>${winner} has won a chat war!</>`);
+            this.omegga.broadcast(`To declare your own chatwar, do /cw declare PLAYERNAME`);
             this.combatants.forEach(async (combatant) => {
                 let currentStore = await this.store.get(combatant);
                 if (!currentStore) {
@@ -178,6 +181,7 @@ class war {
                 }
                 await this.store.set(combatant, currentStore);
             });
+            this.whisperCombatants(`<i>Use</> /cw stats <i>to view your win/loss and other statistics.</>`);
         }
 
         this.removeWar();
