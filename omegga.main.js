@@ -227,12 +227,12 @@ class war {
             this.whisperCombatants(reason);
         }
         //cancel all timers
-        Object.keys(this.confirmations).forEach(key => {
-            if (typeof key === `number`) clearTimeout(this.confirmations[key]);
-        });
-
         this.timers.forEach(timer => {
             clearTimeout(timer);
+        });
+
+        Object.keys(this.confirmations).forEach(key => {
+            if (typeof this.confirmations[key] !== `boolean`) clearTimeout(this.confirmations[key]);
         });
 
         //mark this war for cleanup
