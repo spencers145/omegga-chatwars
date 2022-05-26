@@ -135,7 +135,10 @@ class war {
             PLAYER_NAMES.push(player.name);
         })
         this.combatants.forEach((combatant, index) => {
-            if (!PLAYER_NAMES.includes(combatant)) this.combatants.splice(index, 1);
+            if (!PLAYER_NAMES.includes(combatant)) {
+                this.whisperCombatants(`<i>Can't find ${combatant}. Removing from war.</>`);
+                this.combatants.splice(index, 1);
+            }
         });
 
         if (this.isWarWinnerDeclarable()) {
@@ -191,9 +194,14 @@ class war {
         return this.combatants.includes(player);
     }
 
-    whisperCombatants(msg) {
+    async whisperCombatants(msg) {
+        const PLAYERS = await this.omegga.getPlayers();
+        const PLAYER_NAMES = [];
+        PLAYERS.forEach(player => {
+            PLAYER_NAMES.push(player.name);
+        });
         this.combatants.forEach(combatant => {
-            this.omegga.whisper(combatant, msg);
+            if (PLAYER_NAMES.includes(combatant)) this.omegga.whisper(combatant, msg);
         });
     }
 
@@ -583,4 +591,3 @@ module.exports = class Plugin {
         });
     }
 }
-//
