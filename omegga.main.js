@@ -426,7 +426,7 @@ module.exports = class Plugin {
             `i wonder if this gamemode works while muted`,
             `Does anybody have a favorite 90s PC game?`,
             `Who here has played the Half-Life games?`,
-            `lets play morbcadia!!!`
+            `lets play morbcadia!!!`,
             `what's the hex of your favorite color?`,
             `guys help what time is it`,
             `greggory`,
