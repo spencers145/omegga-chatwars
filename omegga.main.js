@@ -303,6 +303,43 @@ module.exports = class Plugin {
         });
         return whichWar;
     }
+
+    async searchTermsToPlayers(terms) {
+        const ACTUAL_PLAYERS = this.omegga.getPlayers();
+        const PLAYER_NAMES = [];
+        ACTUAL_PLAYERS.forEach(player => {
+            PLAYER_NAMES.push(player.name);
+        });
+        const LOWERCASE_NAMES = [];
+        PLAYER_NAMES.forEach(name => {
+            LOWERCASE_NAMES.push(name.toLowerCase());
+        });
+
+        let termsNotSpecificEnough;
+        let cannotFindPlayer;
+        const PLAYERS = [];
+        terms.forEach(term => {
+            const NAME_INDICES = [];
+            LOWERCASE_NAMES.forEach((name, index) => {
+                if(name.includes(term)) NAME_INDICES.push(index);
+            });
+            if (NAME_INDICES.length > 1) {
+                termsNotSpecificEnough = true;
+            } else if (NAME_INDICES.length === 0) {
+                cannotFindPlayer = true;
+            } else {
+                PLAYERS.push(PLAYER_NAMES[NAME_INDICES[0]]);
+            }
+        });
+
+        if (cannotFindPlayer) {
+            return `Can't find at least one of those players.`;
+        } else if (termsNotSpecificEnough) {
+            return `One of those search terms is too ambiguous. Be more specific.`;
+        } else {
+            return PLAYERS;
+        }
+    }
   
     async init() {
         this.wars = [];
@@ -378,19 +415,35 @@ module.exports = class Plugin {
             switch (subcommand) {
                 case `declare`:
                     //run challenge routine
-                    if (args.includes(player)) {
-                        this.omegga.whisper(player, `<i>You can't declare a chat war on yourself.</>`);
-                    } else if (!args) {
+                    if (!args) {
                         this.omegga.whisper(player, `<i>You must specify who to declare war on.</>`)
-                    } else if (await this.arePlayersOnline(args)) {
-                        if (!this.arePlayersInWar(args) && !CHAT_WAR) {
-                            args.push(player);
-                            this.wars.push(new war(this.omegga, this.config, this.store, player, args, 5, this.phrases));
-                        } else {
-                            this.omegga.whisper(player, `<i>At least one of those players is already embroiled in a chat war, or is waiting to start one.</>`);
-                        }
                     } else {
-                        this.omegga.whisper(player, `<i>Can't find at least one of those players. Remember to use quotes (e.g. "playername") if the name has spaces.</>`);
+                        const PLAYERS = await this.searchTermsToPlayers(args)
+                        if (typeof PLAYERS === `object`) {
+                            if (!PLAYERS.includes(player)) {
+                                let duplicateFound;
+                                let clone = [];
+                                PLAYERS.forEach(player => {
+                                    if (clone.includes(player)) duplicateFound = true;
+                                    clone.push(player);
+                                });
+                                
+                                if (!duplicateFound) {
+                                    if (!this.arePlayersInWar(PLAYERS) && !CHAT_WAR) {
+                                        PLAYERS.push(player);
+                                        this.wars.push(new war(this.omegga, this.config, this.store, player, PLAYERS, 5, this.phrases));
+                                    } else {
+                                        this.omegga.whisper(player, `<i>At least one of those players is already embroiled in a chat war, or is waiting to start one.</>`);
+                                    }
+                                } else {
+                                    this.omegga.whisper(player, `<i>You can't declare on the same player twice.</>`);
+                                }
+                            } else {
+                                this.omegga.whisper(player, `<i>You can't declare a chat war on yourself.</>`);
+                            }
+                        } else {
+                            this.omegga.whisper(player, `<i>${PLAYERS}</>`);
+                        }
                     }
                     //make and store a war object
                     break;
@@ -401,6 +454,14 @@ module.exports = class Plugin {
                         let target;
                         if (args.length === 1) {
                             target = args[0];
+                            if (!await this.store.get(target)) {
+                                target = await this.searchTermsToPlayers(args);
+                                if (typeof target === `object`) {
+                                    target = target[0];
+                                } else {
+                                    target = args[0];
+                                }
+                            }
                         } else {
                             target = player;
                         }
@@ -485,3 +546,4 @@ module.exports = class Plugin {
         });
     }
 }
+//
