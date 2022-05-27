@@ -431,7 +431,7 @@ module.exports = class Plugin {
             `fun fact: i am the fastest typer`,
             `remember that /cw stats can also grab your opponent's stats`,
             `you should /clearbricks. NOW!`,
-            `i wonder if this gamemode works while muted`,
+            `this gamemode can actually work while muted`,
             `Does anybody have a favorite 90s PC game?`,
             `Who here has played the Half-Life games?`,
             `lets play morbcadia!!!`,
@@ -452,7 +452,10 @@ module.exports = class Plugin {
             `literally 2022, figuratively 1984`,
             `The ministry of truth says that I am truthfully a faster typer`,
             `You can always decline a war request.`,
-            `This is phrase #100.`
+            `If you were just gonna lose, why did you accept the war request?`,
+            `This is phrase #100.`,
+            `i'm going to type this and nobody can stop me`,
+            `go ahead, try typing. you can't win.`
         ];
 
         this.omegga.on("cmd:cw", async (player, subcommand, ...args) => {
